@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 
-with open('EBA_LR.pkl', 'rb') as f:
+with open('EBA_LR.pkl', 'wb') as f:
     model = pickle.load(f)
 
 
