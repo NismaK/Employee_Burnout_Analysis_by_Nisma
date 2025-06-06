@@ -13,7 +13,6 @@ intercept = model_params['intercept']
 def predict_burnout(features):
     return np.dot(features, coefficients) + intercept
 
-
 st.set_page_config(page_title="Employee Burnout Analysis", page_icon="🔥")
 st.title("🔥 Employee Burnout Analysis")
 
@@ -45,4 +44,5 @@ if st.button("Predict Burnout"):
         st.success("✅ The employee is not likely experiencing burnout.")
 
 st.markdown("---")
-st.caption("Created with ❤️ by Nisma Kauser")
+st.caption("Created by Nisma Kauser")
+
