@@ -1,18 +1,21 @@
 import streamlit as st
 import numpy as np
+import json
 
-import joblib
 
-model = joblib.load('EBA_LR.joblib')
+with open('model_params.json', 'r') as f:
+    model_params = json.load(f)
 
+coefficients = np.array(model_params['coefficients'])
+intercept = model_params['intercept']
+
+
+def predict_burnout(features):
+    return np.dot(features, coefficients) + intercept
 
 
 st.set_page_config(page_title="Employee Burnout Analysis", page_icon="🔥")
 st.title("🔥 Employee Burnout Analysis")
-st.markdown("""
-Welcome to the Employee Burnout Analysis app! This tool helps you predict the likelihood of employee burnout based on key features.
-""")
-
 
 st.header("Enter Employee Details:")
 
@@ -24,24 +27,22 @@ time_spent_company = st.number_input("Years at Company", min_value=0, max_value=
 work_accident = st.selectbox("Had Work Accident?", ("No", "Yes"))
 promotion_last_5years = st.selectbox("Promoted in Last 5 Years?", ("No", "Yes"))
 
-
 work_accident_bin = 1 if work_accident == "Yes" else 0
 promotion_bin = 1 if promotion_last_5years == "Yes" else 0
 
-input_features = np.array([[
+input_features = np.array([
     satisfaction_level, last_evaluation, number_project,
     average_monthly_hours, time_spent_company,
     work_accident_bin, promotion_bin
-]])
-
+])
 
 if st.button("Predict Burnout"):
-    prediction = model.predict(input_features)
-    if prediction[0] == 1:
+    prediction = predict_burnout(input_features)
+    st.write(f"**Model Output (Raw Prediction)**: {prediction:.2f}")
+    if prediction > 0.5:
         st.error("⚠️ The employee is likely experiencing burnout.")
     else:
         st.success("✅ The employee is not likely experiencing burnout.")
 
-
 st.markdown("---")
-st.caption("Created with ❤️ using Streamlit")
+st.caption("Created with ❤️ by Nisma Kauser")
