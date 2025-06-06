@@ -1,10 +1,10 @@
 import streamlit as st
-import pickle
 import numpy as np
 
+import joblib
 
-with open('EBA_LR.pkl', 'wb') as f:
-    model = pickle.load(f)
+model = joblib.load('EBA_LR.joblib')
+
 
 
 st.set_page_config(page_title="Employee Burnout Analysis", page_icon="🔥")
